@@ -20,15 +20,12 @@ const schema = new Schema({
     type: String,
     default: null,
   },
-  // createdBy: { ref: "user", type: Schema.Types.ObjectId, required: true },
 });
 
 const schemaSignup = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
   subscription: Joi.string(),
-
-  // code: Joi.string().pattern(codeRegex).required(),
 });
 const schemaLogin = Joi.object({
   email: Joi.string().email().required(),

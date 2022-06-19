@@ -1,16 +1,10 @@
 const { Contact } = require("../models/contacts");
 
-const listContacts = async () => {
-  // const { page, limit } = query;
-  // const skipped = (page - 1) * limit;
-  // const skip = skipped < 0 ? 0 : skipped;
-  // // console.log(skip);
-  // return Product.find({}, {}, { skip, limit: Number(limit) }).populate(
-  //   "createdBy",
-  //   "name role"
-  // );
-
-  return Contact.find();
+const listContacts = async (query) => {
+  const { page, limit } = query;
+  const skipped = (page - 1) * limit;
+  const skip = skipped < 0 ? 0 : skipped;
+  return Contact.find({}, {}, { skip, limit: Number(limit) })
 };
 
 const getContactById = async (contactId) => Contact.findById(contactId);

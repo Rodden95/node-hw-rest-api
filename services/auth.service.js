@@ -1,14 +1,13 @@
 const { User } = require("../models/authModel");
 const bcrypt = require("bcryptjs");
-// const Err = require("../error");
 const jwt = require("jsonwebtoken");
+const { loginError } = require("../error");
 
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
 
 const registerUser = async (userData) => {
   const user = await User.findOne({ email: userData.email });
-  // console.log(user);
   if (user) {
     return user;
   }
@@ -25,7 +24,7 @@ const loginUser = async ({ email, password }) => {
 
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) {
-    throw Error();
+    throw loginError();
   }
 
   const payload = {
@@ -40,26 +39,12 @@ const loginUser = async ({ email, password }) => {
 const logoutUser = async (id) => {
   await User.findByIdAndUpdate(id, { token: null });
 };
-const currentUserFind = async (id) => {
-  const user = await User.findById(id);
-  return user;
-};
-// const generateToken = (payload) => {
-//   return jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-// };
 
 const authorizationUser = async (token) => {
-  // console.log(token);
   try {
-    const payload = jwt.verify(token, SECRET_KEY);
-    // return token;
-    // console.log("payload", payload);
-    const { id } = payload;
-    // console.log(User.findById(id));
-    // console.log("ok");
+    const { id } = jwt.verify(token, SECRET_KEY);
     return await User.findById(id);
   } catch (error) {
-    // console.log("cheto");
     return null;
   }
 };
@@ -69,5 +54,4 @@ module.exports = {
   loginUser,
   logoutUser,
   authorizationUser,
-  currentUserFind,
 };
