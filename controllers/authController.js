@@ -23,13 +23,7 @@ const registerUser = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
-    // const { email, password } = req.body;
-    // console.log(req.user);
     const token = await authService.loginUser(req.body);
-    console.log(token);
-    // if (token === undefined) {
-    //   res.status(401).json({ message: "Email or password is wrong" });
-    // }
     res.json({
       token: token,
       user: {
@@ -39,18 +33,25 @@ const loginUser = async (req, res, next) => {
     });
   } catch (error) {
     res.status(401).json({ message: "Email or password is wrong" });
-    // next(error);
   }
 };
 const logoutUser = async (req, res, next) => {
   try {
-    // const { email, password } = req.body;
-    // const { _id } = req.user;
-    await authService.logoutUser();
+    const { _id } = req.user;
+    await authService.logoutUser(_id);
+
     res.sendStatus(204);
   } catch (error) {
     next(error);
   }
 };
-
-module.exports = { registerUser, loginUser, logoutUser };
+const currentUser = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    const { email, subscription } = await authService.currentUserFind(_id);
+    res.json({ email: email, subscription: subscription });
+  } catch (error) {
+    next();
+  }
+};
+module.exports = { registerUser, loginUser, logoutUser, currentUser };

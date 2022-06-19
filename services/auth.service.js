@@ -1,6 +1,6 @@
 const { User } = require("../models/authModel");
 const bcrypt = require("bcryptjs");
-const Err = require("../error");
+// const Err = require("../error");
 const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
@@ -38,10 +38,12 @@ const loginUser = async ({ email, password }) => {
 };
 
 const logoutUser = async (id) => {
-  const user = await User.findByIdAndUpdate(id, { token: null });
-  console.log(user);
+  await User.findByIdAndUpdate(id, { token: null });
 };
-
+const currentUserFind = async (id) => {
+  const user = await User.findById(id);
+  return user;
+};
 // const generateToken = (payload) => {
 //   return jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
 // };
@@ -62,4 +64,10 @@ const authorizationUser = async (token) => {
   }
 };
 
-module.exports = { registerUser, loginUser, logoutUser, authorizationUser };
+module.exports = {
+  registerUser,
+  loginUser,
+  logoutUser,
+  authorizationUser,
+  currentUserFind,
+};
