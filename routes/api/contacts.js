@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const validate = require("../../middlewares/validate");
+
 const { auth } = require("../../middlewares/authMDW");
+
 const { schemaCreate, schemaPatch } = require("../../models/contacts");
 const {
   getAll,
@@ -11,6 +13,7 @@ const {
   updateFavorite,
   deleteById,
 } = require("../../controllers/contactsControllers");
+
 
 router.get("/", auth, getAll);
 
@@ -22,6 +25,7 @@ router.post(
   auth,
   create
 );
+
 
 router.delete("/:contactId", deleteById);
 
