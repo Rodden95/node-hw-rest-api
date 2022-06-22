@@ -24,11 +24,16 @@ router.patch(
   upload.single("avatar"),
   async (req, res, next) => {
     const { _id: id } = req.user;
-    const avatarUrl = await imageService(id, req.file);
+    if (req.file) {
+      const avatarUrl = await imageService(id, req.file);
+
+      await updateUser(id, { avatarUrl });
+      res.json({ avatarUrl: `http://localhost:8080/${avatarUrl}` });
+    } else {
+      res.status(204).json({ message: "No content" });
+    }
     // console.log(req.file);
-    await updateUser(id, { avatarUrl });
     // console.log(user.avatarURL);
-    res.json({ avatarUrl: `http://localhost:8080/${avatarUrl}` });
   }
 );
 module.exports = router;

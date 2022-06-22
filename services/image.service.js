@@ -4,9 +4,8 @@ const fs = require("fs");
 const temp = path.join(__dirname, "../public");
 const AVATARS = "avatars";
 const uploadImage = async (id, file) => {
-  const avatarUrl = path.join(AVATARS, `${id}${file.originalname}`);
-
   try {
+    const avatarUrl = path.join(AVATARS, `${id}${file.originalname}`);
     await sharp(file.path)
       .resize({ width: 250 })
       .toFile(path.join(temp, avatarUrl));
