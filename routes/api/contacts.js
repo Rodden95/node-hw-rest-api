@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const validate = require("../../middlewares/validate");
+
+const { auth } = require("../../middlewares/authMDW");
+
 const { schemaCreate, schemaPatch } = require("../../models/contacts");
 const {
   getAll,
@@ -11,11 +14,18 @@ const {
   deleteById,
 } = require("../../controllers/contactsControllers");
 
-router.get("/", getAll);
+
+router.get("/", auth, getAll);
 
 router.get("/:contactId", getById);
 
-router.post("/", validate(schemaCreate, "missing required name field"), create);
+router.post(
+  "/",
+  validate(schemaCreate, "missing required name field"),
+  auth,
+  create
+);
+
 
 router.delete("/:contactId", deleteById);
 

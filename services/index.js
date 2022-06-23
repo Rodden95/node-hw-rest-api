@@ -5,7 +5,16 @@ const {
   addContact,
   updateContact,
   updateFavorite,
-} = require("./contacts.services");
+
+} = require("./contacts.service");
+const {
+  registerUser,
+  loginUser,
+  logoutUser,
+  authorizationUser,
+  currentUserFind,
+} = require("./auth.service");
+
 
 module.exports = {
   listContacts,
@@ -14,4 +23,11 @@ module.exports = {
   addContact,
   updateContact,
   updateFavorite,
+
+  registerUser,
+  loginUser,
+  logoutUser,
+  authorizationUser,
+  currentUserFind,
+
 };

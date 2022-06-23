@@ -1,7 +1,9 @@
 const contacts = require("../services");
 const getAll = async (req, res, next) => {
   try {
-    res.json(await contacts.listContacts());
+
+    res.json(await contacts.listContacts(req.query));
+
   } catch (e) {
     next(e);
   }
