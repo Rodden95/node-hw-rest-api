@@ -49,9 +49,17 @@ const authorizationUser = async (token) => {
   }
 };
 
+const updateUser = (id, data) => {
+  return User.findByIdAndUpdate(id, data, { new: true });
+};
+
+
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
   authorizationUser,
+
+  updateUser,
+
 };

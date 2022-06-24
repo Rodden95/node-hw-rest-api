@@ -13,6 +13,9 @@ const {
   logoutUser,
   authorizationUser,
   currentUserFind,
+
+  updateUser,
+
 } = require("./auth.service");
 
 
@@ -29,5 +32,8 @@ module.exports = {
   logoutUser,
   authorizationUser,
   currentUserFind,
+
+  updateUser,
+
 
 };

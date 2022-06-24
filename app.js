@@ -8,6 +8,9 @@ const authRoute = require("./routes/api/authRoute");
 const app = express();
 
 app.use(logger("dev"), cors(), express.json());
+app.use(express.static("public"));
+app.use("/api/contacts", auth, contactsRouter);
+app.use("/api/users", authRoute);
 
 app.use("/api/contacts", auth, contactsRouter);
 
