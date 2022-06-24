@@ -10,14 +10,17 @@ const {
 } = require("../../controllers/authController");
 
 const { auth } = require("../../middlewares/authMDW");
+
 const upload = require("../../middlewares/upload");
 const imageService = require("../../services/image.service");
 const { updateUser } = require("../../services");
+
 
 router.post("/signup", validate(schemaSignup), registerUser);
 router.post("/login", validate(schemaLogin), loginUser);
 router.get("/logout", auth, logoutUser);
 router.get("/current", auth, currentUser);
+
 router.patch(
   "/avatars",
   auth,
@@ -36,4 +39,5 @@ router.patch(
     // console.log(user.avatarURL);
   }
 );
+
 module.exports = router;

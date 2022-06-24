@@ -48,14 +48,18 @@ const authorizationUser = async (token) => {
     return null;
   }
 };
+
 const updateUser = (id, data) => {
   return User.findByIdAndUpdate(id, data, { new: true });
 };
+
 
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
   authorizationUser,
+
   updateUser,
+
 };
