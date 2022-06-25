@@ -15,7 +15,6 @@ const upload = require("../../middlewares/upload");
 const imageService = require("../../services/image.service");
 const { updateUser } = require("../../services");
 
-
 router.post("/signup", validate(schemaSignup), registerUser);
 router.post("/login", validate(schemaLogin), loginUser);
 router.get("/logout", auth, logoutUser);
@@ -31,7 +30,9 @@ router.patch(
       const avatarUrl = await imageService(id, req.file);
 
       await updateUser(id, { avatarUrl });
-      res.json({ avatarUrl: `http://localhost:8080/${avatarUrl}` });
+      res.json({
+        avatarUrl: `http://localhost:${process.env.PORT}/${avatarUrl}`,
+      });
     } else {
       res.status(204).json({ message: "No content" });
     }

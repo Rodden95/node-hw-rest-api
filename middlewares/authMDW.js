@@ -1,4 +1,3 @@
-// const err = require("../error");
 const { authorizationUser } = require("../services/auth.service");
 
 const auth = async (req, res, next) => {

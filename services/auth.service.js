@@ -53,7 +53,6 @@ const updateUser = (id, data) => {
   return User.findByIdAndUpdate(id, data, { new: true });
 };
 
-
 module.exports = {
   registerUser,
   loginUser,
@@ -61,5 +60,4 @@ module.exports = {
   authorizationUser,
 
   updateUser,
-
 };
