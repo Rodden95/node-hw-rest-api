@@ -35,8 +35,6 @@ router.patch(
     } else {
       res.status(204).json({ message: "No content" });
     }
-    // console.log(req.file);
-    // console.log(user.avatarURL);
   }
 );
 
