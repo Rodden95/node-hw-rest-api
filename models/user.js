@@ -16,7 +16,6 @@ const schema = new Schema({
       return gravatar.url(this.email, {}, true);
     },
   },
-  // createdBy: { ref: "user", type: Schema.Types.ObjectId, required: true },
 });
 
 const schemaRegistr = Joi.object({
@@ -24,8 +23,6 @@ const schemaRegistr = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
   role: Joi.string(),
-
-  // code: Joi.string().pattern(codeRegex).required(),
 });
 const schemaLogin = Joi.object({
   email: Joi.string().email().required(),
