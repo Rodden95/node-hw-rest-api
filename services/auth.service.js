@@ -1,30 +1,33 @@
 const { User } = require("../models/authModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { loginError } = require("../error");
-
+const err = require("../error");
 require("dotenv").config();
+const { v4 } = require("uuid");
 const { SECRET_KEY } = process.env;
 
 const registerUser = async (userData) => {
   const user = await User.findOne({ email: userData.email });
   if (user) {
-    return user;
+    throw err(409, "Email in use");
   }
   const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-  await User.create({
+  return await User.create({
     ...userData,
     password: hashedPassword,
+    verificationToken: v4(),
   });
 };
 
 const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email });
-
+  if (user && !user.verify) {
+    throw err(404, "User email is not verified");
+  }
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) {
-    throw loginError();
+    throw err(401, "Email or password is wrong");
   }
 
   const payload = {
@@ -49,15 +52,16 @@ const authorizationUser = async (token) => {
   }
 };
 
-const updateUser = (id, data) => {
-  return User.findByIdAndUpdate(id, data, { new: true });
-};
+const updateUser = (id, data) =>
+  User.findByIdAndUpdate(id, data, { new: true });
+
+const findUser = async (filters) => User.findOne(filters);
 
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
   authorizationUser,
-
+  findUser,
   updateUser,
 };
