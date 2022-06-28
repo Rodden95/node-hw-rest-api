@@ -1,12 +1,12 @@
-const authService = require("../services");
+const authService = require("../services/auth.service");
+const emailService = require("../services/email.service");
+
 const registerUser = async (req, res, next) => {
   try {
     const user = await authService.registerUser(req.body);
-    if (user) {
-      res.status(409).json({
-        message: "Email in use",
-      });
-    }
+
+    await emailService.sendEmail(user.email, user.verificationToken);
+
     res.status(201).json({
       email: req.body.email,
       subscription: "starter",
@@ -19,7 +19,7 @@ const registerUser = async (req, res, next) => {
 const loginUser = async (req, res, next) => {
   try {
     const token = await authService.loginUser(req.body);
-    console.log(token);
+
     res.json({
       token: token,
       user: {
@@ -28,7 +28,8 @@ const loginUser = async (req, res, next) => {
       },
     });
   } catch (error) {
-    res.status(401).json({ message: "Email or password is wrong" });
+    console.log("erererererererere");
+    next(error);
   }
 };
 const logoutUser = async (req, res, next) => {
@@ -49,4 +50,56 @@ const currentUser = async (req, res, next) => {
     next();
   }
 };
-module.exports = { registerUser, loginUser, logoutUser, currentUser };
+const confirm = async (req, res, next) => {
+  try {
+   
+    const { verificationToken } = req.params;
+    const user = await authService.findUser({ verificationToken });
+ 
+    if (!user) {
+      res.status(404).json({ message: "Not found" });
+    }
+
+    await authService.updateUser(user._id, {
+      verify: true,
+      verificationToken: null,
+    });
+
+    res.status(200).json({
+      code: 200,
+      message: "Verification successful",
+    });
+  } catch (error) {
+    
+    next(error);
+  }
+};
+const resend = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await authService.findUser({ email });
+
+    if (!user) {
+      res.status(404).json({ message: "Not found" });
+     
+    }
+    if (!user.verificationToken) {
+      res.status(401).json({ message: "Verification has already been passed" });
+    }
+    await emailService.sendEmail(user.email, user.verificationToken);
+
+    return res.status(200).json({
+      message: "Verification email sent",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+module.exports = {
+  registerUser,
+  loginUser,
+  logoutUser,
+  currentUser,
+  resend,
+  confirm,
+};

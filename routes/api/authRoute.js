@@ -1,12 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const validate = require("../../middlewares/validate");
-const { schemaLogin, schemaSignup } = require("../../models/authModel");
+const {
+  schemaLogin,
+  schemaSignup,
+  schemaResend,
+} = require("../../models/authModel");
 const {
   registerUser,
   loginUser,
   logoutUser,
   currentUser,
+  resend,
+  confirm,
 } = require("../../controllers/authController");
 
 const { auth } = require("../../middlewares/authMDW");
@@ -38,5 +44,8 @@ router.patch(
     }
   }
 );
+
+router.get("/verify/:verificationToken", confirm);
+router.post("/verify", validate(schemaResend), resend);
 
 module.exports = router;
